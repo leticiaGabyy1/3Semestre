@@ -1,0 +1,33 @@
+{
+    "funcionarios": [
+        {"nome":"Marcos Silva", "idade":"32 anos","trabalho":"Suporte técnico"},
+        {"nome":"Beatriz Costa", "idade":"27 anos","trabalho":"Vendas"},
+        {"nome":"Ricardo Alves", "idade":"29 anos","trabalho":"Logística"},
+        {"nome":"Juliana Monteiro", "idade":"34 anos","trabalho":"Marketing"}
+    ],
+
+    "produtos":[
+        {"nome":"Mouse Gamer", "preco":"120 reais"},
+        {"nome":"Teclado Mecânico", "preco":"250 reais"},
+        {"nome":"Headset USB", "preco":"180 reais"},
+        {"nome":"Monitor LED 24", "preco":"850 reais"},
+        {"nome":"Webcam Full HD", "preco":"150 reais"}
+    ],
+
+    "pedidos":{
+        "janeiro":[
+            {"ana souza":"Mouse Gamer","pagou":"120 reais"},
+            {"carlos mendes":"Teclado Mecânico","pagou":"250 reais"},
+            {"fernanda lima":"Webcam Full HD","pagou":"150 reais"}
+        ],
+
+        "fevereiro":[
+            {"gabriel santos":"Monitor LED 24","pagou":"850 reais"},
+            {"marina rocha":"Headset USB","pagou":"180 reais"}
+        ]
+
+        
+    }
+        
+    
+}

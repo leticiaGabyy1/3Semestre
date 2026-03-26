@@ -8,12 +8,12 @@ const Aula05_Exercicio = () => {
 
     function entradaMouse (event){
         console.log('Mouse entrou');
-        event.target.style.backgroundColor = '#7db5ff';
+        event.target.style.backgroundColor = '#ff7dad';
     }
 
     function saidaMouse (event){
         console.log('Mouse saiu');
-        event.target.style.backgroundColor = '#7dffb3';
+        event.target.style.backgroundColor = '#f09494';
     }
 
     function alterarCor (event) {
