@@ -1,5 +1,6 @@
 import { estilos } from '../style/Estilos'
 import { useState, useEffect } from 'react'
+import {enderecoServidor} from './Aula07_Multicomponentes'
 import Aula13_Usuario from './Aula13_Usuario'
 
 const Aula13_Crud_Usuarios = () => {
@@ -12,7 +13,7 @@ const Aula13_Crud_Usuarios = () => {
 
     async function botaoExcluir(id_usuario) {
         try {
-            const resposta = await fetch(`http://10.130.42.68:3001/usuarios/${id_usuario}`, {
+            const resposta = await fetch(`${enderecoServidor}/usuarios/${id_usuario}`, {
                 method: 'DELETE'
             })
             if (!resposta.ok) {
@@ -34,7 +35,7 @@ const Aula13_Crud_Usuarios = () => {
         }
 
         try {
-            const resposta = await fetch('http://10.130.42.68:3001/usuarios', {
+            const resposta = await fetch(`${enderecoServidor}/usuarios`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -62,7 +63,7 @@ const Aula13_Crud_Usuarios = () => {
 
     async function buscarDados() {
         try {
-            const resposta = await fetch('http://10.130.42.68:3001/usuarios')
+            const resposta = await fetch(`${enderecoServidor}/usuarios`)
 
             if (!resposta.ok) {
                 throw new Error('Erro ao buscar usuarios')

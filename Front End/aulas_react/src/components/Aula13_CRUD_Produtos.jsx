@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import Aula13_Produto from "./Aula13_Produto"
+import { enderecoServidor } from "./Aula07_Multicomponentes"
 
 const Aula13_CRUD_Produtos = () => {
     const [listaProdutos, setListaProdutos] = useState([])
@@ -35,10 +36,10 @@ async function botaoAdicionar() {
         }
 
         try {
-        let endpoint = 'http://10.130.42.68:3001/produtos'
+        let endpoint = `${enderecoServidor}`
         let metodo = 'POST'
         if(editando == true){
-            endpoint = `http://10.130.42.68:3001/produtos/${id}`
+            endpoint = `${enderecoServidor}/produtos/${id}`
 
         }
 
@@ -80,7 +81,7 @@ async function botaoAdicionar() {
 
     async function buscarDados() {
         try{
-            const resposta = await fetch('http://10.130.42.68:3001/produtos')
+            const resposta = await fetch(`${enderecoServidor}/produtos`)
             const dados = await resposta.json()
             setListaProdutos(dados)
         }catch(error){
