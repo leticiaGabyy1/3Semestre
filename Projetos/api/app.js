@@ -3,6 +3,8 @@ import { BD, testarConexao } from './db.js';
 
 import rotasUsuarios from './src/routes/rotasUsuarios.js'
 import rotasCategorias from './src/routes/rotasCategorias.js'
+import rotasTransacoes from './src/routes/rotasTransacoes.js'
+import rotasSubcategorias from './src/routes/rotasSubcategorias.js'
 
 //usando swagger
 import swaggerUi from 'swagger-ui-express'
@@ -24,6 +26,8 @@ app.get('/', async (req, res) => {
 //utilizando rotas 
 app.use(rotasUsuarios);
 app.use(rotasCategorias);
+app.use(rotasTransacoes);
+app.use(rotasSubcategorias);
 
 
 const porta = 3000;
