@@ -99,9 +99,19 @@ router.patch('/categorias/:id_categoria', async (req, res) => {
             valores.push(descricao);
             contador++;
         }
-        if (cord !== undefined) {
-            campos.push(`cord = $${contador}`);
-            valores.push(cord);
+        if (cor !== undefined) {
+            campos.push(`cor = $${contador}`);
+            valores.push(cor);
+            contador++;
+        }
+        if (cor !== undefined) {
+            campos.push(`tipo = $${contador}`);
+            valores.push(tipo);
+            contador++;
+        }
+        if (cor !== undefined) {
+            campos.push(`icone = $${contador}`);
+            valores.push(icone);
             contador++;
         }
 

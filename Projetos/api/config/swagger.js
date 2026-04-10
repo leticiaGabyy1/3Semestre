@@ -2,7 +2,7 @@ const documentacao = {
     openapi: '3.0.3',
     info: {
         title: 'API de Financeira',
-        description: 'Documentação da API de Grenciamento Financeiro',
+        description: 'Documentação da API de Gerenciamento Financeiro',
         version: '1.0.0'
     },
     servers: [
@@ -11,8 +11,8 @@ const documentacao = {
     tags: [
         { name: 'Usuários', description: 'Operações relacionadas aos usuários' },
         { name: "Categorias", description: "Operações relacionadas as categorias" },
-        { name: "transacoes", description: "Operações relacionadas as transacoes" },
-        { name: "Subcategorias", description: "Operações relacionadas as subcategorias" }
+        { name: "Subcategorias", description: "Operações relacionadas as subcategorias" },
+        { name: "Transacoes", description: "Operações relacionadas as transacoes" }
     ],
     paths: {
         "/usuarios": {
@@ -57,6 +57,7 @@ const documentacao = {
                 }
             }
         },
+
         "/usuarios/{id_usuario}": {
             put: {
                 tags: ['Usuários'],
@@ -83,16 +84,11 @@ const documentacao = {
                     }
                 },
                 responses: {
-                    201: {
+                    200: {
                         description: "Usuário atualizado com sucesso!"
                     },
                     404: {
-                        description: "Usuário não encontrado",
-                        content: {
-                            "application/json": {
-                                example: { message: "Usuário não encontrado" }
-                            }
-                        }
+                        description: "Usuário não encontrado"
                     },
                     500: {
                         description: "Erro interno no servidor"
@@ -120,12 +116,7 @@ const documentacao = {
                         description: "Usuário removido com sucesso!"
                     },
                     404: {
-                        description: "Usuário não encontrado",
-                        content: {
-                            "application/json": {
-                                example: { message: "Usuário não encontrado" }
-                            }
-                        }
+                        description: "Usuário não encontrado"
                     },
                     500: {
                         description: "Erro interno no servidor"
@@ -133,11 +124,12 @@ const documentacao = {
                 }
             }
         },
+
         "/login": {
             post: {
                 tags: ['Autenticação'],
                 summary: 'Realizar Login',
-                description: "Autentica um usuario e retorna id e nome",
+                description: "Autentica um usuário e retorna id e nome",
                 requestBody: {
                     required: true,
                     content: {
@@ -159,11 +151,9 @@ const documentacao = {
                             }
                         }
                     },
-                    400: { description: "Email e senha são obrigatorios" },
+                    400: { description: "Email e senha são obrigatórios" },
                     401: { description: "Credenciais inválidas" },
-                    500: {
-                        description: "Erro interno no servidor"
-                    }
+                    500: { description: "Erro interno no servidor" }
                 }
             }
         },
@@ -209,10 +199,11 @@ const documentacao = {
                 }
             }
         },
+
         "/categorias/{id_categoria}": {
             put: {
                 tags: ['Categorias'],
-                summary: 'Atualizar todos os dados do Categoria',
+                summary: 'Atualizar todos os dados da Categoria',
                 description: 'Atualiza todos os dados de uma Categoria existente, é necessário enviar todos os campos',
                 parameters: [
                     {
@@ -235,16 +226,11 @@ const documentacao = {
                     }
                 },
                 responses: {
-                    201: {
-                        description: "Categoria atualizado com sucesso!"
+                    200: {
+                        description: "Categoria atualizada com sucesso!"
                     },
                     404: {
-                        description: "Categoria não encontrado",
-                        content: {
-                            "application/json": {
-                                example: { message: "Categoria não encontrado" }
-                            }
-                        }
+                        description: "Categoria não encontrada"
                     },
                     500: {
                         description: "Erro interno no servidor"
@@ -260,7 +246,7 @@ const documentacao = {
                         name: "id_categoria",
                         in: "path",
                         required: true,
-                        description: "ID do Categoria a ser removido",
+                        description: "ID da categoria a ser removida",
                         schema: {
                             type: 'integer',
                             example: 1
@@ -269,15 +255,119 @@ const documentacao = {
                 ],
                 responses: {
                     200: {
-                        description: "Categoria removido com sucesso!"
+                        description: "Categoria removida com sucesso!"
                     },
                     404: {
-                        description: "Categoria não encontrado",
+                        description: "Categoria não encontrada"
+                    },
+                    500: {
+                        description: "Erro interno no servidor"
+                    }
+                }
+            }
+        },
+
+        "/subcategorias": {
+            get: {
+                tags: ["Subcategorias"],
+                summary: "Listar todas as subcategorias",
+                responses: {
+                    200: {
+                        description: "Dados obtidos com sucesso!",
                         content: {
                             "application/json": {
-                                example: { message: "Categoria não encontrado" }
+                                schema: {
+                                    type: "array",
+                                    items: { $ref: '#/components/schemas/Listar_SubCategorias' }
+                                }
                             }
                         }
+                    }
+                }
+            },
+            post: {
+                tags: ["Subcategorias"],
+                summary: "Cadastrar Subcategorias",
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                $ref: "#/components/schemas/Cadastrar_SubCategorias"
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    201: {
+                        description: "Subcategoria cadastrada com sucesso!"
+                    },
+                    500: {
+                        description: "Erro interno no servidor"
+                    }
+                }
+            }
+        },
+
+        "/subcategorias/{id_subcategoria}": {
+            put: {
+                tags: ['Subcategorias'],
+                summary: 'Atualizar todos os dados da Subcategoria',
+                description: 'Atualiza todos os dados de uma Subcategoria existente, é necessário enviar todos os campos',
+                parameters: [
+                    {
+                        name: "id_subcategoria",
+                        in: "path",
+                        required: true,
+                        description: "ID da Subcategoria a ser atualizada",
+                        schema: {
+                            type: 'integer',
+                            example: 1
+                        }
+                    }
+                ],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: { $ref: "#/components/schemas/Atualizar_SubCategorias" }
+                        }
+                    }
+                },
+                responses: {
+                    200: {
+                        description: "Subcategoria atualizada com sucesso!"
+                    },
+                    404: {
+                        description: "Subcategoria não encontrada"
+                    },
+                    500: {
+                        description: "Erro interno no servidor"
+                    }
+                }
+            },
+            delete: {
+                tags: ['Subcategorias'],
+                summary: 'Remover Subcategoria',
+                description: 'Remove subcategoria existente pelo ID',
+                parameters: [
+                    {
+                        name: "id_subcategoria",
+                        in: "path",
+                        required: true,
+                        description: "ID da subcategoria a ser removida",
+                        schema: {
+                            type: 'integer',
+                            example: 1
+                        }
+                    }
+                ],
+                responses: {
+                    200: {
+                        description: "Subcategoria removida com sucesso!"
+                    },
+                    404: {
+                        description: "Subcategoria não encontrada"
                     },
                     500: {
                         description: "Erro interno no servidor"
@@ -288,8 +378,8 @@ const documentacao = {
 
         "/transacoes": {
             get: {
-                tags: ["transacoes"],
-                summary: "Listar todos os transações",
+                tags: ["Transacoes"],
+                summary: "Listar todas as transações",
                 responses: {
                     200: {
                         description: "Dados obtidos com sucesso!",
@@ -304,98 +394,27 @@ const documentacao = {
                     }
                 }
             },
+            /** POST ADICIONADO AQUI **/
             post: {
-                tags: ["transacoes"],
-                summary: "Cadastrar transacoes",
+                tags: ["Transacoes"],
+                summary: "Cadastrar nova Transação",
+                description: "Cadastra uma nova transação financeira",
                 requestBody: {
                     required: true,
                     content: {
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/Cadastrar_transacoes"
+                                $ref: "#/components/schemas/Cadastrar_Transacoes"
                             }
                         }
                     }
                 },
                 responses: {
                     201: {
-                        description: "Transações cadastrada com sucesso!"
+                        description: "Transação cadastrada com sucesso!"
                     },
-                    500: {
-                        description: "Erro interno no servidor"
-                    }
-                }
-            }
-        },
-        "/transacoes/{id_transacao}": {
-            put: {
-                tags: ['transacoes'],
-                summary: 'Atualizar todos os dados de Transacoes',
-                description: 'Atualiza todos os dados de uma Transacao existente, é necessário enviar todos os campos',
-                parameters: [
-                    {
-                        name: "id_transacao",
-                        in: "path",
-                        required: true,
-                        description: "ID da Transacao a ser atualizada",
-                        schema: {
-                            type: 'integer',
-                            example: 1
-                        }
-                    }
-                ],
-                requestBody: {
-                    required: true,
-                    content: {
-                        "application/json": {
-                            schema: { $ref: "#/components/schemas/Atualizar_Transacao" }
-                        }
-                    }
-                },
-                responses: {
-                    201: {
-                        description: "Transação atualizado com sucesso!"
-                    },
-                    404: {
-                        description: "Transação não encontrado",
-                        content: {
-                            "application/json": {
-                                example: { message: "Transação não encontrado" }
-                            }
-                        }
-                    },
-                    500: {
-                        description: "Erro interno no servidor"
-                    }
-                }
-            },
-            delete: {
-                tags: ['transacoes'],
-                summary: 'Remover Transações',
-                description: 'Remove transação existente pelo ID',
-                parameters: [
-                    {
-                        name: "id_transacao",
-                        in: "path",
-                        required: true,
-                        description: "ID do Transação a ser removido",
-                        schema: {
-                            type: 'integer',
-                            example: 1
-                        }
-                    }
-                ],
-                responses: {
-                    200: {
-                        description: "Transação removido com sucesso!"
-                    },
-                    404: {
-                        description: "Transação não encontrado",
-                        content: {
-                            "application/json": {
-                                example: { message: "Transação não encontrado" }
-                            }
-                        }
+                    400: {
+                        description: "Dados inválidos"
                     },
                     500: {
                         description: "Erro interno no servidor"
@@ -406,14 +425,14 @@ const documentacao = {
 
         "/transacoes/tipo/{tipo}": {
             get: {
-                tags: ["transacoes"],
-                summary: "Listar todos os transações",
+                tags: ["Transacoes"],
+                summary: "Listar transações por tipo (Entrada/Saída)",
                 parameters: [
                     {
                         name: "tipo",
                         in: "path",
                         required: true,
-                        description: "Tipo transação (E = Entrada / S = saida",
+                        description: "Tipo da transação (E = Entrada / S = Saída)",
                         schema: { type: "string", enum: ["E", "S"], example: "S" }
                     }
                 ],
@@ -433,135 +452,17 @@ const documentacao = {
             }
         },
 
-        "/subcategorias": {
+        "/transacoes/categorias/{categoria}": {
             get: {
-                tags: ["Subcategorias"],
-                summary: "Listar todos as subcategorias",
-                responses: {
-                    200: {
-                        description: "Dados obtidos com sucesso!",
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    type: "array",
-                                    items: { $ref: '#/components/schemas/Listar_Subcategoria' }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            post: {
-                tags: ["Subcategorias"],
-                summary: "Cadastrar subcategorias",
-                requestBody: {
-                    required: true,
-                    content: {
-                        "application/json": {
-                            schema: {
-                                $ref: "#/components/schemas/Cadastrar_subcategorias"
-                            }
-                        }
-                    }
-                },
-                responses: {
-                    201: {
-                        description: "Subcategorias cadastrada com sucesso!"
-                    },
-                    500: {
-                        description: "Erro interno no servidor"
-                    }
-                }
-            }
-        },
-        "/subcategorias/{id_subcategoria}": {
-            put: {
-                tags: ['Subcategorias'],
-                summary: 'Atualizar todos os dados de Subcategoria',
-                description: 'Atualiza todos os dados de uma subcategoria existente, é necessário enviar todos os campos',
+                tags: ["Transacoes"],
+                summary: "Listar transações por categoria",
                 parameters: [
                     {
-                        name: "id_subcategoria",
+                        name: "categoria",
                         in: "path",
                         required: true,
-                        description: "ID da subcategoria a ser atualizada",
-                        schema: {
-                            type: 'integer',
-                            example: 1
-                        }
-                    }
-                ],
-                requestBody: {
-                    required: true,
-                    content: {
-                        "application/json": {
-                            schema: { $ref: "#/components/schemas/Atualizar_Subcategoria" }
-                        }
-                    }
-                },
-                responses: {
-                    201: {
-                        description: "Subcategoria atualizada com sucesso!"
-                    },
-                    404: {
-                        description: "Subcategoria não encontrada",
-                        content: {
-                            "application/json": {
-                                example: { message: "Subcategorias não encontrada" }
-                            }
-                        }
-                    },
-                    500: {
-                        description: "Erro interno no servidor"
-                    }
-                }
-            },
-            delete: {
-                tags: ['Subcategorias'],
-                summary: 'Remover subcategorias',
-                description: 'Remove subcategoria existente pelo ID',
-                parameters: [
-                    {
-                        name: "id_subcategoria",
-                        in: "path",
-                        required: true,
-                        description: "ID da subcategoria a ser removido",
-                        schema: {
-                            type: 'integer',
-                            example: 1
-                        }
-                    }
-                ],
-                responses: {
-                    200: {
-                        description: "Subcategoria removido com sucesso!"
-                    },
-                    404: {
-                        description: "Subcategoria não encontrado",
-                        content: {
-                            "application/json": {
-                                example: { message: "subcategoria não encontrado" }
-                            }
-                        }
-                    },
-                    500: {
-                        description: "Erro interno no servidor"
-                    }
-                }
-            }
-        },
-
-        "/transacoes/subcategorias/{subcategoria}": {
-            get: {
-                tags: ["transacoes"],
-                summary: "Listar todos as subcategorias",
-                parameters: [
-                    {
-                        name: "subcategoria",
-                        in: "path",
-                        required: true,
-                        description: "subcategoria de transação (laticinios / confeitaria",
-                        schema: { type: "string", example: "laticinios" }
+                        description: "Nome da categoria",
+                        schema: { type: "string", example: "Alimento" }
                     }
                 ],
                 responses: {
@@ -580,17 +481,120 @@ const documentacao = {
             }
         },
 
-        "/transacoes/categoria/{categoria}": {
+        "/transacoes/subcategoria/{subcategoria}": {
             get: {
-                tags: ["transacoes"],
-                summary: "Listar todos os transações",
+                tags: ["Transacoes"],
+                summary: "Listar transações por subcategoria",
                 parameters: [
                     {
-                        name: "categoria",
+                        name: "subcategoria",
                         in: "path",
                         required: true,
-                        description: "Tipo transação (alimento / bebida",
-                        schema: { type: "string", example: "bebida" }
+                        description: "Nome da subcategoria",
+                        schema: { type: "string", example: "Lacteos" }
+                    }
+                ],
+                responses: {
+                    200: {
+                        description: "Dados obtidos com sucesso!",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "array",
+                                    items: { $ref: '#/components/schemas/Listar_Transacoes' }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/transacoes/{id_transacao}": {
+            put: {
+                tags: ['Transacoes'],
+                summary: 'Atualizar todos os dados da Transação',
+                description: 'Atualiza todos os dados de uma transação existente',
+                parameters: [
+                    {
+                        name: "id_transacao",
+                        in: "path",
+                        required: true,
+                        description: "ID da transação a ser atualizada",
+                        schema: {
+                            type: 'integer',
+                            example: 1
+                        }
+                    }
+                ],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: { $ref: "#/components/schemas/Atualizar_Transacoes" }
+                        }
+                    }
+                },
+                responses: {
+                    200: {
+                        description: "Transação atualizada com sucesso!"
+                    },
+                    404: {
+                        description: "Transação não encontrada"
+                    },
+                    500: {
+                        description: "Erro interno no servidor"
+                    }
+                }
+            },
+            delete: {
+                tags: ['Transacoes'],
+                summary: 'Remover Transação',
+                description: 'Remove transação existente pelo ID',
+                parameters: [
+                    {
+                        name: "id_transacao",
+                        in: "path",
+                        required: true,
+                        description: "ID da transação a ser removida",
+                        schema: {
+                            type: 'integer',
+                            example: 1
+                        }
+                    }
+                ],
+                responses: {
+                    200: {
+                        description: "Transação removida com sucesso!"
+                    },
+                    404: {
+                        description: "Transação não encontrada"
+                    },
+                    500: {
+                        description: "Erro interno no servidor"
+                    }
+                }
+            }
+        },
+
+        "/transacoes/periodo": {
+            get: {
+                tags: ["Transacoes"],
+                summary: "Listar transações por período",
+                parameters: [
+                    {
+                        name: "inicio",
+                        in: "query",
+                        required: true,
+                        description: "Data de início do período",
+                        schema: { type: "string", example: "10/04/2026" }
+                    },
+                    {
+                        name: "fim",
+                        in: "query",
+                        required: true,
+                        description: "Data de fim do período",
+                        schema: { type: "string", example: "13/04/2026" }
                     }
                 ],
                 responses: {
@@ -609,22 +613,23 @@ const documentacao = {
             }
         }
     },
-    components: {
+
+   components: {
         schemas: {
             Listar_Usuarios: {
                 type: 'object',
                 properties: {
                     id: { type: "integer", example: 1 },
-                    nome: { type: "string", example: "Ricardo" },
-                    email: { type: "string", example: "ricardo@email.com" },
+                    nome: { type: "string", example: "Leticia" },
+                    email: { type: "string", example: "leticia1@email.com" },
                     tipo_acesso: { type: "string", example: "admin" }
                 }
             },
             Cadastrar_Usuario: {
                 type: 'object',
                 properties: {
-                    nome: { type: "string", example: "Ricardo" },
-                    email: { type: "string", example: "ricardo2@email.com" },
+                    nome: { type: "string", example: "Leticia" },
+                    email: { type: "string", example: "leticia1@email.com" },
                     senha: { type: "string", example: "Senha123" },
                     tipo_acesso: { type: "string", example: "admin" }
                 }
@@ -633,8 +638,8 @@ const documentacao = {
                 type: 'object',
                 required: ["nome", "email", "senha"],
                 properties: {
-                    nome: { type: "string", example: "Nina" },
-                    email: { type: "string", example: "nina@email.com" },
+                    nome: { type: "string", example: "luana" },
+                    email: { type: "string", example: "luana@email.com" },
                     senha: { type: "string", example: "Senha123" },
                     tipo_acesso: { type: "string", example: "admin" }
                 }
@@ -642,7 +647,7 @@ const documentacao = {
             Login_Usuario: {
                 type: 'object',
                 properties: {
-                    email: { type: "string", example: "ricardo2@email.com" },
+                    email: { type: "string", example: "leticia@email.com" },
                     senha: { type: "string", example: "Senha123" }
                 }
             },
@@ -654,7 +659,7 @@ const documentacao = {
                         type: 'object',
                         properties: {
                             id_usuario: { type: "integer", example: 1 },
-                            nome: { type: "string", example: "Ricardo" }
+                            nome: { type: "string", example: "Leticia" }
                         }
                     }
                 }
@@ -690,65 +695,72 @@ const documentacao = {
                     tipo: { type: "string", example: "E" }
                 }
             },
+            Listar_SubCategorias: {
+                type: 'object',
+                properties: {
+                    id: { type: "integer", example: 1 },
+                    nome: { type: "string", example: "name" }
+                }
+            },
+            Cadastrar_SubCategorias: {
+                type: 'object',
+                properties: {
+                    nome: { type: "string", example: "name" },
+                    id_categoria: {
+                        type: "integer",
+                        example: 1,
+                        description: "ID da categoria pai"
+                    }
+                }
+            },
+            Atualizar_SubCategorias: {
+                type: 'object',
+                properties: {
+                    nome: { type: "string", example: "name" },
+                    id_categoria: { type: "integer", example: 1 }
+                }
+            },
             Listar_Transacoes: {
                 type: 'object',
                 properties: {
                     id_transacao: { type: "integer", example: 1 },
                     valor: { type: "number", example: 10.00 },
-                    descricao: { type: "string", example: "consulta médica" },
-                    data_registro: { type: "string", example: "2026/04/09" },
-                    data_vencimento: { type: "string", example: "2026/04/10" },
-                    data_pagamento: { type: "string", example: "2026/04/11" },
+                    descricao: { type: "string", example: "consulta medica" },
+                    data_resgistro: { type: "string", example: "10/04/2026" },
+                    data_vencimento: { type: "string", example: "10/04/2026" },
+                    data_pagamento: { type: "string", example: "10/04/2026" },
                     tipo: { type: "string", enum: ["E", "S"], example: "E" },
-                    nome_categoria: { type: "string", example: "saúde" }
+                    nome_categoria: { type: "string", example: "Saude" },
+                    nome_subcategoria: { type: "string", example: "Consulta Medica" }
                 }
             },
-            Cadastrar_transacoes: {
+            Cadastrar_Transacoes: {
                 type: 'object',
                 properties: {
-                    valor: { type: "number", example: 10.00 },
-                    descricao: { type: "string", example: "consulta médica" },
-                    data_registro: { type: "string", example: "2026/04/09" },
-                    data_vencimento: { type: "string", example: "2026/04/10" },
-                    data_pagamento: { type: "string", example: "2026/04/11" },
+                    valor: { type: "number", example: 150.00 },
+                    descricao: { type: "string", example: "Pagamento de conta" },
+                    data_resgistro: { type: "string", example: "10/04/2026" },
+                    data_vencimento: { type: "string", example: "15/04/2026" },
+                    data_pagamento: { type: "string", example: "10/04/2026" },
+                    tipo: { type: "string", enum: ["E", "S"], example: "S" },
+                    id_categoria: { type: "integer", example: 3 },
+                    id_subcategoria: { type: "integer", example: 7 }
+                }
+            },
+            Atualizar_Transacoes: {
+                type: 'object',
+                properties: {
+                    valor: { type: "number", example: 200.00 },
+                    descricao: { type: "string", example: "consulta medica" },
+                    data_resgistro: { type: "string", example: "10/04/2026" },
+                    data_vencimento: { type: "string", example: "10/04/2026" },
+                    data_pagamento: { type: "string", example: "10/04/2026" },
                     tipo: { type: "string", enum: ["E", "S"], example: "E" },
-                    nome_categoria: { type: "string", example: "saúde" }
-                }
-            },
-            Atualizar_Transacao: {
-                type: 'object',
-                properties: {
-                    valor: { type: "number", example: 10.00 },
-                    descricao: { type: "string", example: "consulta médica" },
-                    data_registro: { type: "string", example: "2026/04/09" },
-                    data_vencimento: { type: "string", example: "2026/04/10" },
-                    data_pagamento: { type: "string", example: "2026/04/11" },
-                    tipo: { type: "string", enum: ["E", "S"], example: "E" },
-                    nome_categoria: { type: "string", example: "saúde" }
-                }
-            },
-            Listar_Subcategoria: {
-                type: 'object',
-                properties: {
-                    id_subcategoria: { type: "integer", example: 1 },
-                    ativo: { type: "boolean", example: true },
-                    id_categoria: { type: "integer", example: 1 }
-                }
-            },
-            Cadastrar_subcategorias: {
-                type: 'object',
-                properties: {
-                    ativo: { type: "boolean", example: true },
-                    id_categoria: { type: "integer", example: 1 }
-                }
-            },
-            Atualizar_Subcategoria: {
-                type: 'object',
-                properties: {
-                    ativo: { type: "boolean", example: true },
-                    id_categoria: { type: "integer", example: 1 }
+                    nome_categoria: { type: "string", example: "Saude" },
+                    nome_subcategoria: { type: "string", example: "Consulta Medica" }
                 }
             }
+
         }
     }
 }
